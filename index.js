@@ -71,4 +71,4 @@ wss.on("connection", (ws) => {
   });
 });
 
-server.listen(8082);
+server.listen(process.env.PORT ? parseInt(process.env.PORT) : 8082);
