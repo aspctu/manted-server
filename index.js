@@ -104,12 +104,10 @@ wss.on("connection", (ws) => {
       console.log(`Host stopped sharing for ${roomName}`);
     } else {
       const idx = connectedRoom.guests.indexOf(ws);
-
-      console.log(`Guest disconnected fired for ${roomName}`, idx);
       if (idx > -1) {
         connectedRoom.guests.splice(idx, 1);
-        console.log(`Disconnected client from ${roomName}`);
       }
+      console.log(`Disconnected client from ${roomName}`);
     }
   });
 });
