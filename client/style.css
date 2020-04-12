@@ -110,4 +110,5 @@ iframe {
 
 #viewer-count.connected {
   display: block;
+  z-index: 9999;
 }
