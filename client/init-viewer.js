@@ -44,4 +44,12 @@ export const initViewer = (roomName) => {
       }
     }
   });
+
+  ws.addEventListener("close", () => {
+    const playerEl = document.getElementsByClassName("replayer-wrapper")[0];
+    const doneEl = document.createElement("div");
+    doneEl.textContent = "Session ended";
+    doneEl.classList.add("ended");
+    playerEl.appendChild(doneEl);
+  });
 };
