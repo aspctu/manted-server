@@ -1,6 +1,12 @@
 import * as rrweb from "@yunyu/rrweb-patched";
 
 export const initViewer = (roomName) => {
+  const playerWrapper = document.getElementById("player");
+  const connectingEl = document.createElement("div");
+  connectingEl.textContent = "Waiting for host...";
+  connectingEl.classList.add("connecting");
+  playerWrapper.appendChild(connectingEl);
+
   const ws = new WebSocket("ws://" + window.location.host);
   ws.addEventListener("open", () => {
     console.log("opened");
@@ -34,6 +40,7 @@ export const initViewer = (roomName) => {
 
       const offset = lastReplayTimestamp - firstReplayTimestamp;
       console.log("offset", offset);
+      playerWrapper.removeChild(connectingEl);
       rrplayer.play(offset);
       player = rrplayer;
     } else if (type === "FRAMES") {
