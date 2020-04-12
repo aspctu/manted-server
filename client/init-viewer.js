@@ -22,8 +22,16 @@ export const initViewer = (roomName) => {
         }
       }
       queuedFrames = [];
-      player = new rrweb.Replayer(replayFrames.map(([frame]) => frame));
+      player = new rrweb.Replayer(
+        replayFrames.map(([frame]) => frame),
+        { liveMode: true }
+      );
       player.play();
+    } else if (type === "FRAMES") {
+      for (const frame of message.frames) {
+        player.addEvent(frame);
+      }
+      console.log(player);
     }
   });
 };
