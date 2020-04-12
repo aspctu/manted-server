@@ -32,10 +32,9 @@ export const initViewer = (roomName) => {
       player = rrplayer;
     } else if (type === "FRAMES") {
       if (player !== null) {
-        for (const frame of message.frames) {
+        for (const [frame] of message.frames) {
           player.addEvent(frame);
         }
-        console.log(player);
       }
     }
   });
