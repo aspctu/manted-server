@@ -41,7 +41,7 @@ wss.on("connection", (ws) => {
       return;
     }
 
-    console.log("sending viewer count: ", connectedRoom.guests.length);
+    // console.log("sending viewer count: ", connectedRoom.guests.length);
     ws.send(
       JSON.stringify({
         type: "viewerCount",
@@ -59,6 +59,7 @@ wss.on("connection", (ws) => {
         connectedRoom = { host: ws, guests: [] };
         rooms.set(roomName, connectedRoom);
         viewerCountInterval = setInterval(sendViewerCount, 1000);
+        sendViewerCount();
       }
     } else if (type === "joinRoom") {
       roomName = message.roomName;
@@ -89,7 +90,7 @@ wss.on("connection", (ws) => {
     }
   });
 
-  ws.on("close", (ws) => {
+  ws.on("close", () => {
     if (viewerCountInterval !== null) {
       clearInterval(viewerCountInterval);
     }
@@ -103,6 +104,8 @@ wss.on("connection", (ws) => {
       console.log(`Host stopped sharing for ${roomName}`);
     } else {
       const idx = connectedRoom.guests.indexOf(ws);
+
+      console.log(`Guest disconnected fired for ${roomName}`, idx);
       if (idx > -1) {
         connectedRoom.guests.splice(idx, 1);
         console.log(`Disconnected client from ${roomName}`);
