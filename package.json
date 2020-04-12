@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@yunyu/rrweb-patched": "^0.7.33",
+    "@yunyu/rrweb-patched": "^0.7.34-hack",
     "express": "^4.17.1",
     "parcel": "^1.12.4",
     "rrweb": "^0.7.33",
