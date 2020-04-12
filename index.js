@@ -34,11 +34,13 @@ const rooms = new Map();
 wss.on("connection", (ws) => {
   let roomName = null;
   let connectedRoom = null;
+  let isHost = null;
 
   ws.on("message", (msg) => {
     const { type, ...message } = JSON.parse(msg);
     if (type === "makeRoom") {
       roomName = message.roomName;
+      isHost = true;
       if (!rooms.has(roomName)) {
         console.log(`Making room ${roomName}`);
         connectedRoom = { host: ws, guests: [] };
@@ -46,6 +48,8 @@ wss.on("connection", (ws) => {
       }
     } else if (type === "joinRoom") {
       roomName = message.roomName;
+      isHost = false;
+
       if (rooms.has(roomName)) {
         connectedRoom = rooms.get(roomName);
         connectedRoom.guests.push(ws);
@@ -86,10 +90,15 @@ wss.on("connection", (ws) => {
     );
   };
 
-  const viewerCountInterval = setInterval(computeViewerCount, 1000);
+  let viewerCountInterval;
+  if (isHost) {
+    viewerCountInterval = setInterval(computeViewerCount, 1000);
+  }
 
   ws.on("close", (ws) => {
-    clearInterval(viewerCountInterval);
+    if (viewerCountInterval) {
+      clearInterval(viewerCountInterval);
+    }
     if (!connectedRoom) return;
 
     if (connectedRoom.host === ws) {
