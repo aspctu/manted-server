@@ -7,6 +7,10 @@ export const initViewer = (roomName) => {
   connectingEl.classList.add("connecting");
   playerWrapper.appendChild(connectingEl);
 
+  const roomClosedTask = window.setTimeout(() => {
+    connectingEl.textContent = "This session has already ended.";
+  }, 3000);
+
   const ws = new WebSocket("ws://" + window.location.host);
   ws.addEventListener("open", () => {
     console.log("opened");
@@ -20,6 +24,8 @@ export const initViewer = (roomName) => {
     const { type, ...message } = JSON.parse(msg.data);
     console.log("recv", type);
     if (type === "REPLAY_BATCH") {
+      window.clearTimeout(roomClosedTask);
+
       const replayFrames = message.frames;
       const firstReplayTimestamp = replayFrames[0][0].timestamp;
       const lastReplayTimestamp =
