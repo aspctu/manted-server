@@ -14,24 +14,29 @@ export const initViewer = (roomName) => {
     const { type, ...message } = JSON.parse(msg.data);
     if (type === "REPLAY_BATCH") {
       const replayFrames = message.frames;
+      const firstReplayTimestamp = replayFrames[0][0].timestamp;
       const lastReplayTimestamp =
         replayFrames[replayFrames.length - 1][0].timestamp;
+
       for (const frame of queuedFrames) {
         if (frame[0].timestamp > lastReplayTimestamp) {
           replayFrames.push(frame);
         }
       }
       queuedFrames = [];
-      player = new rrweb.Replayer(
+      const rrplayer = new rrweb.Replayer(
         replayFrames.map(([frame]) => frame),
         { liveMode: true }
       );
-      player.play();
+      rrplayer.play(lastReplayTimestamp - firstReplayTimestamp);
+      player = rrplayer;
     } else if (type === "FRAMES") {
-      for (const frame of message.frames) {
-        player.addEvent(frame);
+      if (player !== null) {
+        for (const frame of message.frames) {
+          player.addEvent(frame);
+        }
+        console.log(player);
       }
-      console.log(player);
     }
   });
 };
