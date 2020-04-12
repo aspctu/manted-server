@@ -1,6 +1,12 @@
 const WebSocket = require("ws");
+const express = require("express");
+const http = require("http");
 
-const wss = new WebSocket.Server({ port: 8082 });
+const app = express();
+app.use(express.static("client/public"));
+const server = http.createServer(app);
+
+const wss = new WebSocket.Server({ server });
 
 /*
 rooms: Map<string, {host: WSCLient, guests: WSClient[], replayFrames: any[] }>
@@ -43,6 +49,7 @@ wss.on("connection", (ws) => {
         if (frame[1]) {
           connectedRoom.replayFrames = [];
         }
+        // console.log(frame);
         connectedRoom.replayFrames.push(frame);
       }
     }
@@ -62,3 +69,5 @@ wss.on("connection", (ws) => {
     }
   });
 });
+
+server.listen(8082);
