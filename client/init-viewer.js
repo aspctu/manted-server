@@ -7,6 +7,8 @@ export const initViewer = (roomName) => {
   connectingEl.classList.add("connecting");
   playerWrapper.appendChild(connectingEl);
 
+  const viewerCountEl = document.getElementById("viewer-count");
+
   const roomClosedTask = window.setTimeout(() => {
     connectingEl.textContent = "This session has already ended.";
   }, 3000);
@@ -55,6 +57,10 @@ export const initViewer = (roomName) => {
           player.addEvent(frame);
         }
       }
+    } else if (type === "viewerCount") {
+      const { value } = message;
+      viewerCountEl.textContent = `${value} viewing this session`;
+      viewerCountEl.classList.add("connected");
     }
   });
 
@@ -63,6 +69,7 @@ export const initViewer = (roomName) => {
     const doneEl = document.createElement("div");
     doneEl.textContent = "Session ended";
     doneEl.classList.add("ended");
+    viewerCountEl.classList.remove("connected");
     playerEl.appendChild(doneEl);
   });
 };

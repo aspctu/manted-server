@@ -35,7 +35,6 @@ wss.on("connection", (ws) => {
   let roomName = null;
   let connectedRoom = null;
 
-  let viewerCountInterval = null;
   const sendViewerCount = () => {
     if (!connectedRoom) {
       return;
@@ -50,6 +49,9 @@ wss.on("connection", (ws) => {
     );
   };
 
+  const viewerCountInterval = setInterval(sendViewerCount, 1000);
+  sendViewerCount();
+
   ws.on("message", (msg) => {
     const { type, ...message } = JSON.parse(msg);
     if (type === "makeRoom") {
@@ -58,8 +60,6 @@ wss.on("connection", (ws) => {
         console.log(`Making room ${roomName}`);
         connectedRoom = { host: ws, guests: [] };
         rooms.set(roomName, connectedRoom);
-        viewerCountInterval = setInterval(sendViewerCount, 1000);
-        sendViewerCount();
       }
     } else if (type === "joinRoom") {
       roomName = message.roomName;
