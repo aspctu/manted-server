@@ -34,21 +34,34 @@ const rooms = new Map();
 wss.on("connection", (ws) => {
   let roomName = null;
   let connectedRoom = null;
-  let isHost = null;
+
+  let viewerCountInterval = null;
+  const sendViewerCount = () => {
+    if (!connectedRoom) {
+      return;
+    }
+
+    console.log("sending viewer count: ", connectedRoom.guests.length);
+    ws.send(
+      JSON.stringify({
+        type: "viewerCount",
+        value: connectedRoom.guests.length,
+      })
+    );
+  };
 
   ws.on("message", (msg) => {
     const { type, ...message } = JSON.parse(msg);
     if (type === "makeRoom") {
       roomName = message.roomName;
-      isHost = true;
       if (!rooms.has(roomName)) {
         console.log(`Making room ${roomName}`);
         connectedRoom = { host: ws, guests: [] };
         rooms.set(roomName, connectedRoom);
+        viewerCountInterval = setInterval(sendViewerCount, 1000);
       }
     } else if (type === "joinRoom") {
       roomName = message.roomName;
-      isHost = false;
 
       if (rooms.has(roomName)) {
         connectedRoom = rooms.get(roomName);
@@ -76,27 +89,8 @@ wss.on("connection", (ws) => {
     }
   });
 
-  const computeViewerCount = () => {
-    if (!connectedRoom) {
-      return;
-    }
-
-    console.log("sending viewer count: ", connectedRoom.guests.length);
-    ws.send(
-      JSON.stringify({
-        type: "viewerCount",
-        value: connectedRoom.guests.length,
-      })
-    );
-  };
-
-  let viewerCountInterval;
-  if (isHost) {
-    viewerCountInterval = setInterval(computeViewerCount, 1000);
-  }
-
   ws.on("close", (ws) => {
-    if (viewerCountInterval) {
+    if (viewerCountInterval !== null) {
       clearInterval(viewerCountInterval);
     }
     if (!connectedRoom) return;
