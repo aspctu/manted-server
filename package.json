@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "parcel watch client/index.html --out-dir client/public"
+    "watch": "parcel watch client/index.html --out-dir client/public",
+    "build": "parcel build client/index.html --out-dir client/public",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
