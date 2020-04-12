@@ -12,6 +12,7 @@ export const initViewer = (roomName) => {
 
   ws.addEventListener("message", (msg) => {
     const { type, ...message } = JSON.parse(msg.data);
+    console.log("recv", type);
     if (type === "REPLAY_BATCH") {
       const replayFrames = message.frames;
       const firstReplayTimestamp = replayFrames[0][0].timestamp;
@@ -28,11 +29,16 @@ export const initViewer = (roomName) => {
         replayFrames.map(([frame]) => frame),
         { liveMode: true }
       );
-      rrplayer.play(lastReplayTimestamp - firstReplayTimestamp);
+      const offset = lastReplayTimestamp - firstReplayTimestamp;
+      console.log("offset", offset);
+      rrplayer.play(offset);
       player = rrplayer;
     } else if (type === "FRAMES") {
       if (player !== null) {
-        for (const [frame] of message.frames) {
+        for (const [frame, isCheck] of message.frames) {
+          if (isCheck) {
+            console.log("check frame recv");
+          }
           player.addEvent(frame);
         }
       }
