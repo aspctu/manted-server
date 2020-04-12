@@ -1,0 +1,51 @@
+body {
+  margin: 0;
+}
+
+.replayer-wrapper {
+  position: relative;
+}
+
+.replayer-mouse {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: 0.25s linear;
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU3IiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KIDwhLS0gQ3JlYXRlZCB3aXRoIE1ldGhvZCBEcmF3IC0gaHR0cDovL2dpdGh1Yi5jb20vZHVvcGl4ZWwvTWV0aG9kLURyYXcvIC0tPgoKIDxnPgogIDx0aXRsZT5iYWNrZ3JvdW5kPC90aXRsZT4KICA8cmVjdCBmaWxsPSJub25lIiBpZD0iY2FudmFzX2JhY2tncm91bmQiIGhlaWdodD0iNDAyIiB3aWR0aD0iMjU5IiB5PSItMSIgeD0iLTEiLz4KICA8ZyBkaXNwbGF5PSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgeT0iMCIgeD0iMCIgaGVpZ2h0PSIxMDAlIiB3aWR0aD0iMTAwJSIgaWQ9ImNhbnZhc0dyaWQiPgogICA8cmVjdCBmaWxsPSJ1cmwoI2dyaWRwYXR0ZXJuKSIgc3Ryb2tlLXdpZHRoPSIwIiB5PSIwIiB4PSIwIiBoZWlnaHQ9IjEwMCUiIHdpZHRoPSIxMDAlIi8+CiAgPC9nPgogPC9nPgogPGc+CiAgPHRpdGxlPkxheWVyIDE8L3RpdGxlPgogIDxnIHN0cm9rZT0ibnVsbCIgaWQ9InN2Z184Ij4KICAgPHBhdGggc3Ryb2tlPSJudWxsIiBpZD0ic3ZnXzQiIGQ9Im0xLjQ4MDcyOCwzNTAuMDQ4Nzk5bDAsLTM1MC4zOTc5OTRsMjU0LjAzODU0NiwyNTQuMDM4NTQ2bC0xNDguOTE5MTQ4LDBsLTguNzU5OTUsMi4xODk5ODdsLTk2LjM1OTQ0OCw5NC4xNjk0NjF6IiBmaWxsPSIjRkZGIi8+CiAgIDxwYXRoIHN0cm9rZT0ibnVsbCIgaWQ9InN2Z181IiBkPSJtMjAwLjc2OTU4NywzNjUuMzc4NzExbC03OC44Mzk1NDksMzIuODQ5ODEybC0xMDIuOTI5NDExLC0yNDMuMDg4NjA5bDgxLjAyOTUzNiwtMzIuODQ5ODEybDEwMC43Mzk0MjMsMjQzLjA4ODYwOXoiIGZpbGw9IiNGRkYiLz4KICAgPHBhdGggc3Ryb2tlPSJudWxsIiBpZD0ic3ZnXzYiIGQ9Im02My40NTczNzMsMjA1LjM1NjMyN2w0MC40MDUyNjksLTE2Ljk1MDUwM2w2Ny44MDIwMTIsMTYxLjUzMzQ3NWwtNDAuMzgzMzY5LDE2Ljk3MjQwM2wtNjcuODIzOTEyLC0xNjEuNTU1Mzc1eiIvPgogICA8cGF0aCBzdHJva2U9Im51bGwiIGlkPSJzdmdfNyIgZD0ibTIzLjM4MDYwMiw1Mi4yMTA1MDRsMCwyNDUuMjc4NTk2bDY1LjY5OTYyNCwtNjMuNTA5NjM2bDguNzU5OTUsLTIuMTg5OTg3bDEwNS4xMTkzOTgsMGwtMTc5LjU3ODk3MiwtMTc5LjU3ODk3MnoiLz4KICA8L2c+CiA8L2c+Cjwvc3ZnPg==");
+  transform: translate(0px, 5px);
+}
+
+.replayer-mouse:after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: #f6e549;
+  transform: translate(-5px, -7.5px);
+  opacity: 0.3;
+}
+
+.replayer-mouse.active:after {
+  animation: a 0.2s ease-in-out 1;
+}
+
+@keyframes a {
+  0% {
+    opacity: 0.3;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    transform: translate(-10px, -10px);
+  }
+  50% {
+    opacity: 0.5;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    transform: translate(-5px, -5px);
+  }
+}

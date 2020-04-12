@@ -25,10 +25,13 @@ export const initViewer = (roomName) => {
         }
       }
       queuedFrames = [];
+
+      console.log("replayFrames", replayFrames);
       const rrplayer = new rrweb.Replayer(
         replayFrames.map(([frame]) => frame),
         { liveMode: true }
       );
+
       const offset = lastReplayTimestamp - firstReplayTimestamp;
       console.log("offset", offset);
       rrplayer.play(offset);
@@ -36,9 +39,6 @@ export const initViewer = (roomName) => {
     } else if (type === "FRAMES") {
       if (player !== null) {
         for (const [frame, isCheck] of message.frames) {
-          if (isCheck) {
-            console.log("check frame recv");
-          }
           player.addEvent(frame);
         }
       }
