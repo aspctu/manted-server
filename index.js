@@ -55,8 +55,26 @@ wss.on("connection", (ws) => {
     }
   });
 
+  const computeViewerCount = () => {
+    if (!connectedRoom) {
+      return;
+    }
+
+    console.log("sending viewer count: ", connectedRoom.guests.length);
+    ws.send(
+      JSON.stringify({
+        type: "viewerCount",
+        value: connectedRoom.guests.length,
+      })
+    );
+  };
+
+  const viewerCountInterval = setInterval(computeViewerCount, 1000);
+
   ws.on("close", (ws) => {
+    clearInterval(viewerCountInterval);
     if (!connectedRoom) return;
+
     if (connectedRoom.host === ws) {
       rooms.delete(roomName);
       for (const guest of connectedRoom.guests) {
