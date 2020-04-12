@@ -68,4 +68,5 @@ body {
 
 iframe {
   border: none;
+  display: block;
 }
