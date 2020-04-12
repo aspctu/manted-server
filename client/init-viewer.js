@@ -13,7 +13,10 @@ export const initViewer = (roomName) => {
     connectingEl.textContent = "This session has already ended.";
   }, 3000);
 
-  const ws = new WebSocket("ws://" + window.location.host);
+  const ws = new WebSocket(
+    (window.location.protocol.startsWith("https") ? "wss://" : "ws://") +
+      window.location.host
+  );
   ws.addEventListener("open", () => {
     console.log("opened");
     ws.send(JSON.stringify({ type: "joinRoom", roomName }));
