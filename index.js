@@ -56,6 +56,7 @@ wss.on("connection", (ws) => {
   });
 
   ws.on("close", (ws) => {
+    if (!connectedRoom) return;
     if (connectedRoom.host === ws) {
       rooms.delete(roomName);
       for (const guest of connectedRoom.guests) {
