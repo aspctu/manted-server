@@ -1,5 +1,14 @@
+html,
 body {
   margin: 0;
+  min-width: 100%;
+  min-height: 100%;
+  display: flex;
+}
+
+body {
+  justify-content: center;
+  align-items: center;
 }
 
 .replayer-wrapper {
@@ -48,4 +57,8 @@ body {
     border-radius: 5px;
     transform: translate(-5px, -5px);
   }
+}
+
+iframe {
+  border: none;
 }
