@@ -29,7 +29,7 @@ export const initViewer = (roomName) => {
       console.log("replayFrames", replayFrames);
       const rrplayer = new rrweb.Replayer(
         replayFrames.map(([frame]) => frame),
-        { liveMode: true }
+        { liveMode: true, root: document.getElementById("player") }
       );
 
       const offset = lastReplayTimestamp - firstReplayTimestamp;

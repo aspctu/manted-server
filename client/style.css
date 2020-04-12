@@ -1,12 +1,13 @@
 html,
-body {
+body,
+#player {
   margin: 0;
   min-width: 100%;
   min-height: 100%;
   display: flex;
 }
 
-body {
+#player {
   justify-content: center;
   align-items: center;
   background-color: #444;
