@@ -2,3 +2,4 @@ node_modules
 .cache
 client/public
 .DS_Store
+dist

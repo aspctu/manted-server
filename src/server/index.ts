@@ -1,9 +1,9 @@
-const WebSocket = require("ws");
-const express = require("express");
-const http = require("http");
+import WebSocket from "ws";
+import express from "express";
+import http from "http";
 
 const app = express();
-app.use(express.static("client/public"));
+app.use(express.static("dist/client"));
 const server = http.createServer(app);
 
 const wss = new WebSocket.Server({
@@ -25,15 +25,21 @@ const wss = new WebSocket.Server({
   },
 });
 
-/*
-rooms: Map<string, {host: WSCLient, guests: WSClient[], replayFrames: any[] }>
-*/
+type RoomName = string | null;
+interface Room {
+  host: WebSocket;
+  guests: WebSocket[];
+  replayFrames?: any[];
+}
 
-const rooms = new Map();
+const rooms = new Map<RoomName, Room>();
 
-wss.on("connection", (ws) => {
-  let roomName = null;
-  let connectedRoom = null;
+wss.on("connection", (ws: WebSocket) => {
+  if (!ws) {
+    console.log("huh");
+  }
+  let roomName: RoomName = null;
+  let connectedRoom: Room | undefined = undefined;
 
   const sendViewerCount = () => {
     if (!connectedRoom) {
@@ -52,13 +58,16 @@ wss.on("connection", (ws) => {
   const viewerCountInterval = setInterval(sendViewerCount, 1000);
   sendViewerCount();
 
-  ws.on("message", (msg) => {
+  ws.on("message", (msg: string) => {
     const { type, ...message } = JSON.parse(msg);
     if (type === "makeRoom") {
       roomName = message.roomName;
       if (!rooms.has(roomName)) {
         console.log(`Making room ${roomName}`);
         connectedRoom = { host: ws, guests: [] };
+        if (!connectedRoom) {
+          return;
+        }
         rooms.set(roomName, connectedRoom);
       }
     } else if (type === "joinRoom") {
@@ -66,6 +75,9 @@ wss.on("connection", (ws) => {
 
       if (rooms.has(roomName)) {
         connectedRoom = rooms.get(roomName);
+        if (!connectedRoom) {
+          return;
+        }
         connectedRoom.guests.push(ws);
         ws.send(
           JSON.stringify({
@@ -75,6 +87,9 @@ wss.on("connection", (ws) => {
         );
       }
     } else if (type === "frames") {
+      if (!connectedRoom) {
+        return;
+      }
       for (const guest of connectedRoom.guests) {
         guest.send(JSON.stringify({ type: "FRAMES", frames: message.frames }));
       }
@@ -84,7 +99,9 @@ wss.on("connection", (ws) => {
         if (frame[1]) {
           connectedRoom.replayFrames = [];
         }
-        // console.log(frame);
+        if (!connectedRoom.replayFrames) {
+          return;
+        }
         connectedRoom.replayFrames.push(frame);
       }
     }
