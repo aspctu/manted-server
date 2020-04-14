@@ -75,17 +75,21 @@ wss.on("connection", (ws) => {
         );
       }
     } else if (type === "frames") {
-      for (const guest of connectedRoom.guests) {
-        guest.send(JSON.stringify({ type: "FRAMES", frames: message.frames }));
-      }
-
-      for (const frame of message.frames) {
-        // Replay frame start
-        if (frame[1]) {
-          connectedRoom.replayFrames = [];
+      if (connectedRoom) {
+        for (const guest of connectedRoom.guests) {
+          guest.send(
+            JSON.stringify({ type: "FRAMES", frames: message.frames })
+          );
         }
-        // console.log(frame);
-        connectedRoom.replayFrames.push(frame);
+
+        for (const frame of message.frames) {
+          // Replay frame start
+          if (frame[1]) {
+            connectedRoom.replayFrames = [];
+          }
+          // console.log(frame);
+          connectedRoom.replayFrames.push(frame);
+        }
       }
     }
   });
