@@ -87,22 +87,21 @@ wss.on("connection", (ws: WebSocket) => {
         );
       }
     } else if (type === "frames") {
-      if (!connectedRoom) {
-        return;
-      }
-      for (const guest of connectedRoom.guests) {
-        guest.send(JSON.stringify({ type: "FRAMES", frames: message.frames }));
-      }
+      if (connectedRoom) {
+        for (const guest of connectedRoom.guests) {
+          guest.send(
+            JSON.stringify({ type: "FRAMES", frames: message.frames })
+          );
+        }
 
-      for (const frame of message.frames) {
-        // Replay frame start
-        if (frame[1]) {
-          connectedRoom.replayFrames = [];
+        for (const frame of message.frames) {
+          // Replay frame start
+          if (frame[1]) {
+            connectedRoom.replayFrames = [];
+          }
+
+          connectedRoom.replayFrames?.push(frame);
         }
-        if (!connectedRoom.replayFrames) {
-          return;
-        }
-        connectedRoom.replayFrames.push(frame);
       }
     }
   });
